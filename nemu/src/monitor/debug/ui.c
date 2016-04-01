@@ -76,7 +76,7 @@ static int cmd_x(char *args){
 	int i;
 	for(i=0;i<num;i++)
 	{
-		swaddr_read(addr+4*i,4);
+		printf("%x\n",swaddr_read(addr+4*i,4));
 	}
 	return 0;	
 }
