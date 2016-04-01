@@ -43,7 +43,10 @@ static int cmd_si(char *args){
 	if(args==NULL){
 		cpu_exec(1);
 	}
-	else cpu_exec(*args);
+	else {
+		int num = atoi(args);
+		cpu_exec(num);
+	}
 	return 0;
 }
 
@@ -51,19 +54,30 @@ static int cmd_info(char *args){
 	int i,j,k;
 	if(*args=='r'){
 		for(i=0;i<8;i++){
-			printf("%d\n",reg_l(i));
+			printf("%s-%x\n",regsl[i],reg_l(i));
 		}
 		for(j=0;j<8;j++){
-			printf("%d\n",reg_w(j));
+			printf("%s-%x\n",regsw[j],reg_w(j));
 		}
 		for(k=0;k<8;k++){
-			printf("%d\n",reg_b(k));
-		}		
+			printf("%s-%x\n",regsb[k],reg_b(k));
+		}
+		printf("eip-%x\n",cpu.eip);		
 	}
 	return 0;
 }
 
 static int cmd_x(char *args){
+	char *args1,*args2;
+	args1 = strtok(args," ");
+	args2 = strtok(NULL," ");
+	int num = atoi(args1);
+	int addr = strtol(args2,NULL,16);
+	int i;
+	for(i=0;i<num;i++)
+	{
+		swaddr_read(addr+4*i,4);
+	}
 	return 0;	
 }
 
@@ -123,6 +137,7 @@ void ui_mainloop() {
 		if(args >= str_end) {
 			args = NULL;
 		}
+
 
 #ifdef HAS_DEVICE
 		extern void sdl_clear_event_queue(void);
