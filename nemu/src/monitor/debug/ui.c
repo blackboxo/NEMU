@@ -51,13 +51,13 @@ static int cmd_info(char *args){
 	int i,j,k;
 	if(*args=='r'){
 		for(i=0;i<8;i++){
-			printf("%d/n",reg_l(i));
+			printf("%d\n",reg_l(i));
 		}
 		for(j=0;j<8;j++){
-			printf("%d/n",reg_w(j));
+			printf("%d\n",reg_w(j));
 		}
 		for(k=0;k<8;k++){
-			printf("%d/n",reg_b(k));
+			printf("%d\n",reg_b(k));
 		}		
 	}
 	return 0;
