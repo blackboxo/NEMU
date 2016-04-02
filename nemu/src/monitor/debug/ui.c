@@ -54,13 +54,13 @@ static int cmd_info(char *args){
 	int i,j,k;
 	if(*args=='r'){
 		for(i=0;i<8;i++){
-			printf("%s-%x\n",regsl[i],reg_l(i));
+			printf("%s-%08x\n",regsl[i],reg_l(i));
 		}
 		for(j=0;j<8;j++){
-			printf("%s-%x\n",regsw[j],reg_w(j));
+			printf("%s-%04x\n",regsw[j],reg_w(j));
 		}
 		for(k=0;k<8;k++){
-			printf("%s-%x\n",regsb[k],reg_b(k));
+			printf("%s-%02x\n",regsb[k],reg_b(k));
 		}
 		printf("eip-%x\n",cpu.eip);		
 	}
@@ -76,7 +76,7 @@ static int cmd_x(char *args){
 	int i;
 	for(i=0;i<num;i++)
 	{
-		printf("0x%08x\n",swaddr_read(addr+4*i,4));
+		printf("%08x\n",swaddr_read(addr+4*i,4));
 	}
 	return 0;	
 }
