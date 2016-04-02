@@ -62,7 +62,7 @@ static int cmd_info(char *args){
 		for(k=0;k<8;k++){
 			printf("%s-%02x\n",regsb[k],reg_b(k));
 		}
-		printf("eip-%x\n",cpu.eip);		
+		printf("eip-%d\n",cpu.eip);		
 	}
 	return 0;
 }
