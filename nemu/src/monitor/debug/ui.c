@@ -9,7 +9,6 @@
 #include <readline/history.h>
 
 void cpu_exec(uint32_t);
-
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
 	static char *line_read = NULL;
@@ -64,6 +63,18 @@ static int cmd_info(char *args){
 		}
 		printf("eip-%x\n",cpu.eip);		
 	}
+	else if(*args=='w')
+	{
+		bool succ=true;
+		bool* success=&succ;
+		WP* temp=head;
+		while(temp!=NULL)
+		{
+			printf("watchpoint NO:%d,expr:%s=%u\n",temp->NO,temp->str,expr(temp->str,success));
+			temp=temp->next;
+		}
+	}
+	else printf("Wrong instruction\n");
 	return 0;
 }
 
@@ -90,7 +101,36 @@ static int cmd_p(char *args){
 	return 0;
 }
 
+static int cmd_w(char *args){
+	bool succ=true;
+	bool* success=&succ;
+	WP* temp=new_wp();
+	char *arg;
+	arg=strtok(args," ");
+	strcpy(temp->str,arg);
+	temp->result=expr(temp->str,success);
+	printf("Set watchpoint NO:%d,expr:%s=%u\n",temp->NO,temp->str,temp->result);
+	return 0;
+}
 
+static int cmd_d(char *args){
+	char *arg;
+	arg = strtok(args," ");
+	int num = atoi(arg);
+	WP* temp=head;
+	while(temp!=NULL)
+	{
+		if(temp->NO==num)
+		{
+			free_wp(temp);
+			printf("delete watchpoint NO:%d\n",temp->NO);
+			break;
+		}
+	temp=temp->next;
+	}
+	return 0;
+}	
+	
 
 static struct {
 	char *name;
@@ -104,6 +144,8 @@ static struct {
 	{ "info","Print register",cmd_info},
 	{ "x","Scan memory",cmd_x},
 	{ "p","Experssion",cmd_p},
+	{ "w","Set watchpoint",cmd_w},
+	{ "d","Delete watchpoint",cmd_d},
 	/* TODO: Add more commands */
 
 };
