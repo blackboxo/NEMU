@@ -29,6 +29,29 @@ union{
 swaddr_t eip;
 }CPU_state;
 
+union{
+	struct{
+		uin32_t CF:1;
+		uin32_t: 0;
+		uin32_t PF:1;
+		uin32_t: 0;
+		uin32_t AF:1;
+		uin32_t: 0;
+		uin32_t ZF:1;
+		uin32_t SF:1;
+		uin32_t TF:1;
+		uin32_t IF:1;
+		uin32_t DF:1;
+		uin32_t OF:1;
+		uin32_t IOPL:1;
+		uin32_t NT:1;
+		uin32_t: 0;
+		uin32_t RF:1;
+		uin32_t VM:1;
+	};
+	uin32_t eflags;
+};
+
 extern CPU_state cpu;
 enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI };
 enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
