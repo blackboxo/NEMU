@@ -8,6 +8,15 @@
  * cpu.gpr[1]._8[1], we will get the 'ch' register. Hint: Use `union'.
  * For more details about the register encoding scheme, see i386 manual.
  */
+typedef union{
+	struct
+	{
+		uint16_t rpl :2;
+		uint16_t ti :1;
+		uint16_t index:13;
+	};
+	uint16_t val;
+}SELECTOR;
 
 typedef struct {
 union{
@@ -27,36 +36,42 @@ union{
 	};
 	/* Do NOT change the order of the GPRs' definitions. */
 swaddr_t eip;
-}CPU_state;
+
+union{
+	SELECTOR SR[4];
+	uint16_t es, cs ,ss, ds;
+};
 
 union{
 	struct{
-		uin32_t CF:1;
-		uin32_t: 0;
-		uin32_t PF:1;
-		uin32_t: 0;
-		uin32_t AF:1;
-		uin32_t: 0;
-		uin32_t ZF:1;
-		uin32_t SF:1;
-		uin32_t TF:1;
-		uin32_t IF:1;
-		uin32_t DF:1;
-		uin32_t OF:1;
-		uin32_t IOPL:1;
-		uin32_t NT:1;
-		uin32_t: 0;
-		uin32_t RF:1;
-		uin32_t VM:1;
+		uint32_t CF:1;
+		uint32_t: 0;
+		uint32_t PF:1;
+		uint32_t: 0;
+		uint32_t AF:1;
+		uint32_t: 0;
+		uint32_t ZF:1;
+		uint32_t SF:1;
+		uint32_t TF:1;
+		uint32_t IF:1;
+		uint32_t DF:1;
+		uint32_t OF:1;
+		uint32_t IOPL:1;
+		uint32_t NT:1;
+		uint32_t: 0;
+		uint32_t RF:1;
+		uint32_t VM:1;
 	};
-	uin32_t eflags;
+	uint32_t eflags;
 };
+
+}CPU_state;
 
 extern CPU_state cpu;
 enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI };
 enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
 enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
-
+enum { R_ES, R_CS, R_SS, R_DS };
 
 static inline int check_reg_index(int index) {
 	assert(index >= 0 && index < 8);

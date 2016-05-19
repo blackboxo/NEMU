@@ -87,7 +87,7 @@ static int cmd_x(char *args){
 	int i;
 	for(i=0;i<num;i++)
 	{
-		printf("%08x\n",swaddr_read(addr+4*i,4));
+		printf("%08x\n",swaddr_read(addr+4*i,4,R_SS));
 	}
 	return 0;	
 }

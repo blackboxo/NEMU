@@ -204,7 +204,7 @@ uint32_t eval(uint32_t p,uint32_t q) {
 			return !eval(p+1,q);
 		}
 		else if(tokens[p].type==POINTER){
-			return swaddr_read(eval(p+1,q),4);
+			return swaddr_read(eval(p+1,q),4,R_DS);
 		}
 		else{
 			uint32_t op=getOp(p,q);
