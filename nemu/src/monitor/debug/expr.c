@@ -12,6 +12,7 @@ enum {
 	DEC,HEX,REG,
 	AND,NE,OR,
 	NOT,POINTER,NEG,
+	VAR,
 	/* TODO: Add more token types */
 
 };
@@ -29,6 +30,7 @@ static struct rule {
 	{"[0-9]+",DEC},					// decimal
 	{"0x[0-9a-f]+",HEX},			// heximal
 	{"\\$[a-z]+",REG},				// reg
+	{"[a-zA-Z_]+[a-zA-Z0-9_]*",VAR},// var
 	{"\\+", '+'},					// plus
 	{"-",'-'},						// subscribe
 	{"\\*",'*'},					// multiply
@@ -132,6 +134,11 @@ static bool make_token(char *e) {
 						{tokens[nr_token].type=POINTER;
 						nr_token++;
 						break;}
+					case VAR:
+						tokens[nr_token].type=rules[i].token_type;
+						memcpy(tokens[nr_token].str,substr_start,substr_len);
+						nr_token++;		
+						break;
 					case '+':
 					case '/':
 					case '(':
@@ -169,6 +176,8 @@ uint32_t expr(char *e, bool *success) {
 	return eval(0,nr_token-1);
 }
 
+int get_var(char *str);
+
 uint32_t eval(uint32_t p,uint32_t q) {
 	    if(p > q) {
 			assert(0); /* Bad expression */
@@ -192,6 +201,8 @@ uint32_t eval(uint32_t p,uint32_t q) {
 					else if(!strcmp(temp,"edi"))return cpu.edi;
 					else if(!strcmp(temp,"eip"))return cpu.eip;
 					default:assert(0);
+				case VAR:
+					return get_var(tokens[p].str);
 		}
 		}
 		else if(check_parentheses(p, q) == true) {
@@ -243,7 +254,8 @@ bool check_parentheses(uint32_t p,uint32_t q)
 	if(par==0)
 		return true;
 	return false;
-}	
+}
+
 
 uint32_t getOp(uint32_t p,uint32_t q)
 {
@@ -295,7 +307,6 @@ uint32_t getOp(uint32_t p,uint32_t q)
 				op=p;pri=12;
 			}
 		}
-				
 	}
 	return op;
 }
