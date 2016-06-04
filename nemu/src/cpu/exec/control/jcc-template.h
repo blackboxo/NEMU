@@ -29,5 +29,16 @@ make_instr_helper(i)
 
 #undef instr
 
+#define instr jbe
+
+static void do_execute() {
+		get_new_eip();
+		if(cpu.CF == 1 || cpu.ZF == 1) cpu.eip = new_eip;
+	}
+
+make_instr_helper(i)
+
+#undef instr
+
 #undef CODE_LEN
 #include "cpu/exec/template-end.h"

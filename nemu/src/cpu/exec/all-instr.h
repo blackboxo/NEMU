@@ -13,6 +13,10 @@
 #include "arith/div.h"
 #include "arith/cmp.h"
 #include "arith/sub.h"
+#include "arith/add.h"
+#include "arith/leave.h"
+#include "arith/jmp.h"
+#include "arith/ret.h"
 
 #include "control/call.h"
 #include "control/jcc.h"
