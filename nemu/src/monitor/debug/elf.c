@@ -89,3 +89,14 @@ int get_var(char *str){
 	}
 	return -1;
 }
+
+int get_stack(int addr, char *str){
+	int i;
+	for(i = 0; i < nr_symtab_entry; i++){
+		if(addr >= symtab[i].st_value && addr < symtab[i].st_value + symtab[i].st_size){
+			strcpy(str, strtab + symtab[i].st_name);
+			return 1;
+		}
+	}
+	return 0;
+}

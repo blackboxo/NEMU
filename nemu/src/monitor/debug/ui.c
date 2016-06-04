@@ -130,7 +130,21 @@ static int cmd_d(char *args){
 	}
 	return 0;
 }	
-	
+
+int get_stack(int addr,char *str);
+static int cmd_bt(char *args){
+	int ebp=cpu.ebp;
+	int addr=cpu.eip;
+	char str[32];
+	int i = 0;
+	while(get_stack(addr,str)){
+		printf("#%d 0x%x in %s(%d,%d,%d,%d)\n",i++,addr,str,swaddr_read(ebp + 0x8,4,R_SS),swaddr_read(ebp + 0xc, 4,R_SS),swaddr_read(ebp +0x10, 4,R_SS),swaddr_read(ebp + 0x14,4,R_SS));
+		addr = swaddr_read(ebp +4,4,R_SS);
+		ebp = swaddr_read(ebp,4,R_SS);
+	}
+	return 0;
+}
+
 
 static struct {
 	char *name;
@@ -146,6 +160,7 @@ static struct {
 	{ "p","Experssion",cmd_p},
 	{ "w","Set watchpoint",cmd_w},
 	{ "d","Delete watchpoint",cmd_d},
+	{ "bt","Print function stack",cmd_bt},
 	/* TODO: Add more commands */
 
 };
